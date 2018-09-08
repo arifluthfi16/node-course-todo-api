@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose.js'); //Connect & Configure DB
 var {Todo} = require('./models/todo.js'); //Grab Todo Model
@@ -23,6 +24,26 @@ app.post("/todos", (req,res)=>{
     },(e)=>{
         res.status(400).send(e);
     });
+})
+
+app.get("/todos/:id",(req,res)=>{
+    var id = req.params.id;
+    console.log("Requested Id : ", id);
+
+    if(!ObjectID.isValid(id)){
+        console.log("Incoming ID Is Not Valid");
+        return res.status(404).send({});
+    }else{
+        Todo.findById(id).then((todo)=>{
+            if(!todo){
+                return res.status(404).send({});
+            }else{
+                return res.status(200).send(todo);
+            }
+        }).catch((e)=>{
+                return res.status(404).send({});
+        })
+    }
 })
 
 //Bakal Ngelakuin sesuatu buat get request  
