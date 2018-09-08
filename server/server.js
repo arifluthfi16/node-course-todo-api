@@ -25,7 +25,7 @@ app.post("/todos", (req,res)=>{
     });
 })
 
-//Bakal Ngelakuin sesuatu buat get request
+//Bakal Ngelakuin sesuatu buat get request  
 app.get("/todos", (req,res)=>{
     Todo.find().then((todos)=>{
         res.send({
