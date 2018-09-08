@@ -1,13 +1,16 @@
 const expect = require('expect');
 const request = require('supertest');
+const {ObjectID} = require('mongodb'); 
 
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 
 const todos = [{
+        _id : new ObjectID(),
         text: 'First Todo'
     },
     {
+        _id : new ObjectID(),
         text : 'Second Todo'
     }];
 
@@ -16,7 +19,6 @@ beforeEach((done)=>{
         return Todo.insertMany(todos);
     }).then(()=> done());
 });
-
 describe('POST /todos', () =>{
     it('should create a new todo',(done)=>{ //Must Specift Done
         var text = "Text todo text";
@@ -69,6 +71,33 @@ describe('GET /todos',() =>{
         .expect((res) =>{
             expect(res.body.todos.length).toBe(2);
         })
+        .end(done);
+    })
+});
+
+describe('GET /todos/:id', ()=>{
+    it("Should return todo doc by id", (done)=>{
+        request(app)
+            .get(`/todos/${todos[0]._id.toHexString()}`)
+            .expect(200)
+            .expect((res) =>{
+                expect(res.body.todo.text).toBe(todos[0].text);
+            })
+            .end(done);
+    });
+
+    it("Should return 404 if todo not found", (done)=>{
+        // var id = ;
+        request(app)
+        .get(`/todos/${new ObjectID().toHexString()}`)
+        .expect(404)
+        .end(done);
+    });
+
+    it("Should return 404 if id is invalid", (done)=>{
+        request(app)
+        .get(`/todos/123`)
+        .expect(404)
         .end(done);
     })
 });

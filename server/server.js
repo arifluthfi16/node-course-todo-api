@@ -28,17 +28,16 @@ app.post("/todos", (req,res)=>{
 
 app.get("/todos/:id",(req,res)=>{
     var id = req.params.id;
-    console.log("Requested Id : ", id);
 
     if(!ObjectID.isValid(id)){
-        console.log("Incoming ID Is Not Valid");
         return res.status(404).send({});
     }else{
         Todo.findById(id).then((todo)=>{
             if(!todo){
                 return res.status(404).send({});
             }else{
-                return res.status(200).send(todo);
+                return res.status(200).send({todo});
+   
             }
         }).catch((e)=>{
                 return res.status(404).send({});
