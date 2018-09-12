@@ -29,7 +29,7 @@ describe('POST /todos', () =>{
             text
         })
         .expect(200)
-        .expect((res)=>{
+        .expect((res)=>{ 
             expect(res.body.text).toBe(text);
         })
         .end((err,res)=>{
