@@ -47,6 +47,10 @@ app.get("/todos/:id",(req,res)=>{
     }
 })
 
+app.get("/", (req,res)=>{
+    res.send("This is homepage");
+})
+
 //Bakal Ngelakuin sesuatu buat get request  
 app.get("/todos", (req,res)=>{
     Todo.find().then((todos)=>{
